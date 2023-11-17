@@ -190,9 +190,11 @@
             tee_certificates: <span class="macro">vec!</span>[],
             application_data: <span class="prelude-val">None</span>,
         };
-        <span class="kw">let </span>attestation_bundle = AttestationBundle {
+        <span class="attr">#[allow(deprecated)]
+        </span><span class="kw">let </span>attestation_bundle = AttestationBundle {
             attestation_evidence: <span class="prelude-val">Some</span>(attestation_evidence),
             attestation_endorsement: <span class="prelude-val">Some</span>(attestation_endorsement),
+            dice_evidence: <span class="prelude-val">None</span>,
         };
 
         <span class="kw">let </span><span class="kw-2">mut </span>connector_handle = <span class="self">self</span>.connector_handle.clone();
@@ -215,9 +217,8 @@
                     }
                     request_wrapper::Request::InvokeRequest(invoke_request) =&gt; {
                         <span class="kw">let </span>enclave_invoke_request = InvokeRequest {
-                            <span class="comment">// TODO(#4037): Remove once explicit protos are used end-to-end.
-                            </span>body: invoke_request.encrypted_body,
                             encrypted_request: invoke_request.encrypted_request,
+                            ..Default::default()
                         };
                         <span class="kw">let </span>enclave_invoke_response = connector_handle
                             .handle_user_request(enclave_invoke_request)
@@ -226,9 +227,8 @@
                             </span>.into_inner();
 
                         response_wrapper::Response::InvokeResponse(InvokeResponse {
-                            <span class="comment">// TODO(#4037): Remove once explicit protos are used end-to-end.
-                            </span>encrypted_body: enclave_invoke_response.body,
                             encrypted_response: enclave_invoke_response.encrypted_response,
+                            ..Default::default()
                         })
                     }
                 };
