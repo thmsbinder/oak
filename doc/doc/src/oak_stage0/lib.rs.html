@@ -422,9 +422,6 @@
 <a href="#422" id="422">422</a>
 <a href="#423" id="423">423</a>
 <a href="#424" id="424">424</a>
-<a href="#425" id="425">425</a>
-<a href="#426" id="426">426</a>
-<a href="#427" id="427">427</a>
 </pre></div><pre class="rust"><code><span class="comment">//
 // Copyright 2022 The Project Oak Authors
 //
@@ -453,7 +450,7 @@
 
 <span class="kw">use </span>linked_list_allocator::LockedHeap;
 <span class="kw">use </span>oak_core::sync::OnceCell;
-<span class="kw">use </span>oak_dice::evidence::DICE_DATA_CMDLINE_PARAM;
+<span class="kw">use </span>oak_dice::evidence::{TeePlatform, DICE_DATA_CMDLINE_PARAM};
 <span class="kw">use </span>oak_linux_boot_params::{BootE820Entry, E820EntryType};
 <span class="kw">use </span>oak_sev_guest::{io::PortFactoryWrapper, msr::SevStatus};
 <span class="kw">use </span>sha2::{Digest, Sha256};
@@ -477,8 +474,6 @@
 <span class="kw">mod </span>apic;
 <span class="kw">mod </span>cmos;
 <span class="kw">mod </span>dice_attestation;
-<span class="attr">#[cfg(feature = <span class="string">&quot;efi&quot;</span>)]
-</span><span class="kw">mod </span>efi;
 <span class="kw">mod </span>fw_cfg;
 <span class="kw">mod </span>initramfs;
 <span class="kw">mod </span>kernel;
@@ -762,11 +757,18 @@
         memory_map_sha2_256_digest,
     };
 
+    <span class="kw">let </span>tee_platform = <span class="kw">if </span>sev_status().contains(SevStatus::SNP_ACTIVE) {
+        TeePlatform::AmdSevSnp
+    } <span class="kw">else </span>{
+        TeePlatform::None
+    };
+
     <span class="kw">let </span>dice_data = Box::leak(Box::new_in(
         oak_stage0_dice::generate_dice_data(
             <span class="kw-2">&amp;</span>measurements,
             dice_attestation::get_attestation,
             dice_attestation::get_derived_key,
+            tee_platform,
         ),
         <span class="kw-2">&amp;</span><span class="kw">crate</span>::BOOT_ALLOC,
     ));
@@ -774,7 +776,7 @@
     </span>zero_page.insert_e820_entry(BootE820Entry::new(
         dice_data.as_bytes().as_ptr() <span class="kw">as </span>usize,
         dice_data.as_bytes().len(),
-        E820EntryType::DiceData,
+        E820EntryType::RESERVED,
     ));
 
     <span class="comment">// Append the DICE data address to the kernel command-line.
@@ -791,14 +793,6 @@
         <span class="macro">format!</span>(<span class="string">&quot;{} -- {}&quot;</span>, cmdline, extra)
     };
     zero_page.set_cmdline(cmdline);
-
-    <span class="comment">// If required, create a fake EFI system table.
-    </span><span class="kw">if </span><span class="macro">cfg!</span>(feature = <span class="string">&quot;efi&quot;</span>) {
-        <span class="kw">let </span>system_table = efi::create_efi_skeleton();
-        zero_page.set_efi_system_table(PhysAddr::new(
-            VirtAddr::from_ptr(Box::leak(system_table)).as_u64(),
-        ))
-    }
 
     <span class="macro">log::info!</span>(<span class="string">&quot;jumping to kernel at {:#018x}&quot;</span>, entry.as_u64());
 

@@ -253,6 +253,25 @@
 <a href="#253" id="253">253</a>
 <a href="#254" id="254">254</a>
 <a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
 </pre></div><pre class="rust"><code><span class="comment">//
 // Copyright 2022 The Project Oak Authors
 //
@@ -270,12 +289,15 @@
 //
 
 </span><span class="kw">mod </span>channel;
-<span class="kw">mod </span>dice_data;
+<span class="kw">pub mod </span>dice_data;
 <span class="kw">mod </span>fd;
 <span class="kw">mod </span>key;
 <span class="kw">pub mod </span>mmap;
 <span class="kw">mod </span>process;
 <span class="kw">mod </span>stdio;
+
+<span class="attr">#[cfg(feature = <span class="string">&quot;initrd&quot;</span>)]
+</span><span class="kw">mod </span>switch_process;
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">mod </span>tests;
@@ -284,7 +306,8 @@
 <span class="kw">use </span>core::{arch::asm, ffi::c_void};
 
 <span class="kw">use </span>oak_channel::Channel;
-<span class="kw">use </span>oak_dice::evidence::RestrictedKernelDiceData <span class="kw">as </span>DiceData;
+<span class="attr">#[cfg(not(feature = <span class="string">&quot;initrd&quot;</span>))]
+</span><span class="kw">use </span>oak_restricted_kernel_dice::DerivedKey;
 <span class="kw">use </span>oak_restricted_kernel_interface::{Errno, Syscall};
 <span class="kw">use </span>x86_64::{
     registers::{
@@ -294,12 +317,14 @@
     VirtAddr,
 };
 
+<span class="attr">#[cfg(feature = <span class="string">&quot;initrd&quot;</span>)]
+</span><span class="kw">use </span><span class="self">self</span>::switch_process::syscall_unstable_switch_proccess;
 <span class="kw">use </span><span class="self">self</span>::{
     fd::{syscall_fsync, syscall_read, syscall_write},
     mmap::syscall_mmap,
     process::syscall_exit,
 };
-<span class="kw">use crate</span>::{mm, DerivedKey};
+<span class="kw">use </span><span class="kw">crate</span>::mm;
 
 <span class="doccomment">/// State we need to track for system calls.
 ///
@@ -320,10 +345,17 @@
     </span>user_flags: usize,
 }
 
-<span class="kw">pub fn </span>enable_syscalls(channel: Box&lt;<span class="kw">dyn </span>Channel&gt;, dice_data: DiceData, derived_key: DerivedKey) {
+<span class="kw">pub fn </span>enable_syscalls(
+    channel: Box&lt;<span class="kw">dyn </span>Channel&gt;,
+    dice_data: dice_data::DiceData,
+    <span class="attr">#[cfg(not(feature = <span class="string">&quot;initrd&quot;</span>))] </span>derived_key: DerivedKey,
+) {
     channel::register(channel);
     stdio::register();
-    key::register(derived_key);
+    key::register(
+        <span class="attr">#[cfg(not(feature = <span class="string">&quot;initrd&quot;</span>))]
+        </span>derived_key,
+    );
     dice_data::register(dice_data);
 
     <span class="comment">// Allocate a stack for the system call handler.
@@ -370,6 +402,12 @@
             syscall_mmap(arg1 <span class="kw">as </span><span class="kw-2">*const </span>c_void, arg2, arg3, arg4, arg5 <span class="kw">as </span>i32, arg6)
         }
         <span class="prelude-val">Some</span>(Syscall::Fsync) =&gt; syscall_fsync(arg1 <span class="kw">as </span>i32),
+        <span class="attr">#[cfg(feature = <span class="string">&quot;initrd&quot;</span>)]
+        </span><span class="prelude-val">Some</span>(Syscall::UnstableSwitchProcess) =&gt; {
+            syscall_unstable_switch_proccess(arg1 <span class="kw">as </span><span class="kw-2">*mut </span>c_void, arg2)
+        }
+        <span class="attr">#[cfg(not(feature = <span class="string">&quot;initrd&quot;</span>))]
+        </span><span class="prelude-val">Some</span>(Syscall::UnstableSwitchProcess) =&gt; Errno::ENOSYS <span class="kw">as </span>isize,
         <span class="prelude-val">None </span>=&gt; Errno::ENOSYS <span class="kw">as </span>isize,
     }
 }
