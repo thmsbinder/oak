@@ -18,6 +18,7 @@ var srcIndex = JSON.parse('{\
 "oak_containers_syslogd":["",[],["log_relay.rs","main.rs","systemd_journal.rs"]],\
 "oak_core":["",[],["lib.rs","samplestore.rs","sync.rs","timer.rs"]],\
 "oak_crypto":["",[["hpke",[],["aead.rs","mod.rs"]]],["encryption_key.rs","encryptor.rs","lib.rs","signer.rs","verifier.rs"]],\
+"oak_debug_service":["",[],["lib.rs"]],\
 "oak_dice":["",[],["cert.rs","evidence.rs","lib.rs","utils.rs"]],\
 "oak_docker_linux_init":["",[],["init.rs","main.rs"]],\
 "oak_echo_linux_init":["",[],["init.rs","main.rs"]],\
@@ -32,11 +33,12 @@ var srcIndex = JSON.parse('{\
 "oak_functions_sdk":["",[],["lib.rs"]],\
 "oak_functions_sdk_abi_test_get_storage_item":["",[],["lib.rs"]],\
 "oak_functions_sdk_abi_test_invoke_testing":["",[],["lib.rs"]],\
-"oak_functions_service":["",[["wasm",[],["api.rs","mod.rs","wasmtime.rs"]]],["instance.rs","lib.rs","logger.rs","lookup.rs"]],\
+"oak_functions_service":["",[["wasm",[],["api.rs","mod.rs","wasmtime.rs"]]],["instance.rs","lib.rs","logger.rs","lookup.rs","lookup_htbl.rs"]],\
 "oak_functions_test_module":["",[],["lib.rs"]],\
 "oak_functions_test_utils":["",[],["lib.rs"]],\
 "oak_grpc_utils":["",[],["lib.rs"]],\
 "oak_hello_world_linux_init":["",[],["init.rs","main.rs"]],\
+"oak_kernel_measurement":["",[],["main.rs"]],\
 "oak_launcher_utils":["",[],["channel.rs","launcher.rs","lib.rs"]],\
 "oak_linux_boot_params":["",[],["lib.rs"]],\
 "oak_proto_rust":["",[],["lib.rs"]],\
@@ -54,7 +56,7 @@ var srcIndex = JSON.parse('{\
 "oak_tdx_guest":["",[],["lib.rs","tdcall.rs","vmcall.rs"]],\
 "oak_virtio":["",[["console",[],["mod.rs"]],["queue",[],["mod.rs","virtq.rs"]],["vsock",[["socket",[],["mod.rs"]]],["mod.rs","packet.rs"]]],["lib.rs"]],\
 "sev_serial":["",[],["lib.rs"]],\
-"snp_measurement":["",[],["elf.rs","main.rs","page.rs","stage0.rs","vmsa.rs"]],\
+"snp_measurement":["",[],["main.rs","page.rs","stage0.rs","vmsa.rs"]],\
 "xtask":["",[],["check_build_licenses.rs","check_license.rs","check_todo.rs","containers.rs","examples.rs","files.rs","internal.rs","launcher.rs","lib.rs","testing.rs"]]\
 }');
 createSrcSidebar();

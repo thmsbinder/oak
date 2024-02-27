@@ -65,6 +65,11 @@
 <a href="#65" id="65">65</a>
 <a href="#66" id="66">66</a>
 <a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
 </pre></div><pre class="rust"><code><span class="comment">//
 // Copyright 2022 The Project Oak Authors
 //
@@ -83,6 +88,7 @@
 
 </span><span class="attr">#![cfg_attr(not(feature = <span class="string">&quot;std&quot;</span>), no_std)]
 #![feature(never_type)]
+#![feature(new_uninit)]
 #![feature(unwrap_infallible)]
 </span><span class="comment">// Required for enabling benchmark tests.
 </span><span class="attr">#![feature(test)]
@@ -93,6 +99,7 @@
 <span class="kw">use </span>oak_functions_abi::{Request, Response};
 
 <span class="kw">extern crate </span>alloc;
+<span class="kw">extern crate </span>rand_core;
 
 <span class="attr">#[cfg(test)]
 </span><span class="kw">extern crate </span>std;
@@ -100,8 +107,10 @@
 <span class="kw">pub mod </span>proto {
     <span class="kw">pub mod </span>oak {
         <span class="kw">pub mod </span>functions {
-            <span class="attr">#![allow(dead_code)]
-            </span><span class="kw">use </span>prost::Message;
+            <span class="kw">pub mod </span>config {
+                <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/oak.functions.config.rs&quot;</span>));
+            }
+            <span class="kw">use </span>prost::Message;
             <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">&quot;OUT_DIR&quot;</span>), <span class="string">&quot;/oak.functions.rs&quot;</span>));
         }
         <span class="kw">pub use </span>oak_crypto::proto::oak::crypto;
@@ -112,6 +121,7 @@
 <span class="kw">pub mod </span>instance;
 <span class="kw">pub mod </span>logger;
 <span class="kw">pub mod </span>lookup;
+<span class="kw">pub mod </span>lookup_htbl;
 <span class="kw">pub mod </span>wasm;
 
 <span class="kw">pub trait </span>Observer {
