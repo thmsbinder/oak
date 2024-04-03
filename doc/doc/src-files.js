@@ -17,7 +17,7 @@ var srcIndex = JSON.parse('{\
 "oak_containers_stage1":["",[],["client.rs","dice.rs","image.rs","main.rs"]],\
 "oak_containers_syslogd":["",[],["log_relay.rs","main.rs","systemd_journal.rs"]],\
 "oak_core":["",[],["lib.rs","samplestore.rs","sync.rs","timer.rs"]],\
-"oak_crypto":["",[["hpke",[],["aead.rs","mod.rs"]]],["encryption_key.rs","encryptor.rs","lib.rs","signer.rs","verifier.rs"]],\
+"oak_crypto":["",[["hpke",[],["aead.rs","mod.rs"]],["noise_handshake",[],["client.rs","crypto_wrapper.rs","error.rs","mod.rs","noise.rs"]]],["encryption_key.rs","encryptor.rs","lib.rs","signer.rs","verifier.rs"]],\
 "oak_debug_service":["",[],["lib.rs"]],\
 "oak_dice":["",[],["cert.rs","evidence.rs","lib.rs","utils.rs"]],\
 "oak_docker_linux_init":["",[],["init.rs","main.rs"]],\
@@ -47,7 +47,7 @@ var srcIndex = JSON.parse('{\
 "oak_restricted_kernel_interface":["",[],["errno.rs","lib.rs","raw_syscall.rs","syscall.rs","syscalls.rs"]],\
 "oak_restricted_kernel_launcher":["",[],["lib.rs"]],\
 "oak_restricted_kernel_orchestrator":["",[],["lib.rs"]],\
-"oak_restricted_kernel_sdk":["",[],["channel.rs","instance_attestation.rs","lib.rs","mock_attestation.rs","utils.rs"]],\
+"oak_restricted_kernel_sdk":["",[],["attestation.rs","channel.rs","crypto.rs","lib.rs","testing.rs","utils.rs"]],\
 "oak_sev_guest":["",[],["ap_jump_table.rs","cpuid.rs","crypto.rs","ghcb.rs","guest.rs","instructions.rs","interrupts.rs","io.rs","lib.rs","msr.rs","secrets.rs","vmsa.rs"]],\
 "oak_sev_snp_attestation_report":["",[],["lib.rs"]],\
 "oak_simple_io":["",[],["lib.rs"]],\
