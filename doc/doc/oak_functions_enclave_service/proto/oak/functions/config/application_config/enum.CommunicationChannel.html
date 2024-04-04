@@ -4,9 +4,11 @@
 }</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Communication channel parameters.
 The default behaviour depends on the flavour of Oak Functions:</p>
 <ul>
-<li>when running on Restricted Kernel this setting is ignored completely as the communication
+<li>when running on Restricted Kernel this setting is ignored completely as
+the communication
 channel is abstracted away by Restricted Kernel itself.</li>
-<li>on Oak Containers, if not specified, the default communication channel is TCP.</li>
+<li>on Oak Containers, if not specified, the default communication channel
+is TCP.</li>
 </ul>
 </div></details><h2 id="variants" class="variants small-section-header">Variants<a href="#variants" class="anchor">§</a></h2><div class="variants"><section id="variant.TcpChannel" class="variant"><a href="#variant.TcpChannel" class="anchor">§</a><h3 class="code-header">TcpChannel(<a class="struct" href="../struct.TcpCommunicationChannel.html" title="struct oak_functions_enclave_service::proto::oak::functions::config::TcpCommunicationChannel">TcpCommunicationChannel</a>)</h3></section><section id="variant.VsockChannel" class="variant"><a href="#variant.VsockChannel" class="anchor">§</a><h3 class="code-header">VsockChannel(<a class="struct" href="../struct.VsockCommunicationChannel.html" title="struct oak_functions_enclave_service::proto::oak::functions::config::VsockCommunicationChannel">VsockCommunicationChannel</a>)</h3></section></div><h2 id="implementations" class="small-section-header">Implementations<a href="#implementations" class="anchor">§</a></h2><div id="implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-CommunicationChannel" class="impl"><a href="#impl-CommunicationChannel" class="anchor">§</a><h3 class="code-header">impl <a class="enum" href="enum.CommunicationChannel.html" title="enum oak_functions_enclave_service::proto::oak::functions::config::application_config::CommunicationChannel">CommunicationChannel</a></h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.encode" class="method"><h4 class="code-header">pub fn <a href="#method.encode" class="fn">encode</a>&lt;B&gt;(&amp;self, buf: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.reference.html">&amp;mut B</a>)<span class="where fmt-newline">where
     B: BufMut,</span></h4></section></summary><div class="docblock"><p>Encodes the message to a buffer.</p>
