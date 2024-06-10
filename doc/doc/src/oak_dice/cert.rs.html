@@ -371,6 +371,10 @@
 <a href="#369" id="369">369</a>
 <a href="#370" id="370">370</a>
 <a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
 </pre></div><pre class="rust"><code><span class="comment">//
 // Copyright 2023 The Project Oak Authors
 //
@@ -394,8 +398,8 @@
 <span class="kw">use </span>coset::{
     cbor::value::Value,
     cwt::{ClaimName, ClaimsSet, ClaimsSetBuilder},
-    iana, Algorithm, CborSerializable, CoseError, CoseKey, CoseSign1, KeyOperation, KeyType, Label,
-    RegisteredLabelWithPrivate,
+    iana, Algorithm, CborOrdering, CborSerializable, CoseError, CoseKey, CoseSign1, KeyOperation,
+    KeyType, Label, RegisteredLabelWithPrivate,
 };
 <span class="kw">use </span>hkdf::Hkdf;
 <span class="kw">use </span>p256::{
@@ -444,6 +448,8 @@
 </span><span class="kw">pub const </span>FINAL_LAYER_CONFIG_MEASUREMENT_ID: i64 = -<span class="number">4670570</span>;
 <span class="doccomment">/// The CWT private claim ID for SHA2_256 digests.
 </span><span class="kw">pub const </span>SHA2_256_ID: i64 = -<span class="number">4670572</span>;
+<span class="doccomment">/// The CWT private claim ID of the Event.
+</span><span class="kw">pub const </span>EVENT_ID: i64 = -<span class="number">4670573</span>;
 
 <span class="doccomment">/// String to be used as salt for generating Key IDs.
 </span><span class="kw">const </span>ID_SALT: <span class="kw-2">&amp;</span>[u8] = <span class="string">b"DICE_ID_SALT"</span>;
@@ -599,7 +605,7 @@
 <span class="doccomment">/// Converts an ECDSA verifying key to a COSE_Key representation.
 </span><span class="kw">pub fn </span>verifying_key_to_cose_key(public_key: <span class="kw-2">&amp;</span>VerifyingKey) -&gt; CoseKey {
     <span class="kw">let </span>encoded_point = public_key.to_encoded_point(<span class="bool-val">false</span>);
-    CoseKey {
+    <span class="kw">let </span><span class="kw-2">mut </span>ck = CoseKey {
         kty: KeyType::Assigned(iana::KeyType::EC2),
         key_id: Vec::from(derive_verifying_key_id(public_key)),
         alg: <span class="prelude-val">Some</span>(Algorithm::Assigned(iana::Algorithm::ES256)),
@@ -619,7 +625,9 @@
             ),
         ],
         ..Default::default()
-    }
+    };
+    ck.canonicalize(CborOrdering::LengthFirstLexicographic);
+    ck
 }
 
 <span class="doccomment">/// Generates a CWT certificate representing an ECDSA signing key, such as an
