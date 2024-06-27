@@ -12,10 +12,11 @@ var srcIndex = new Map(JSON.parse('[\
 ["oak_attestation_verification_test_utils",["",[],["lib.rs"]]],\
 ["oak_channel",["",[],["basic_framed.rs","client.rs","frame.rs","lib.rs","message.rs","server.rs"]]],\
 ["oak_client",["",[],["client.rs","lib.rs","transport.rs","verifier.rs"]]],\
+["oak_containers_agent",["",[],["lib.rs","metrics.rs"]]],\
 ["oak_containers_hello_world_trusted_app",["",[],["app_service.rs","lib.rs"]]],\
 ["oak_containers_hello_world_untrusted_app",["",[],["app_client.rs","lib.rs"]]],\
 ["oak_containers_launcher",["",[],["lib.rs","qemu.rs","server.rs"]]],\
-["oak_containers_orchestrator",["",[],["container_runtime.rs","crypto.rs","dice.rs","ipc_server.rs","key_provisioning.rs","launcher_client.rs","lib.rs","logging.rs","metrics.rs"]]],\
+["oak_containers_orchestrator",["",[],["container_runtime.rs","crypto.rs","dice.rs","ipc_server.rs","key_provisioning.rs","launcher_client.rs","lib.rs","logging.rs"]]],\
 ["oak_containers_sdk",["",[],["crypto.rs","lib.rs","orchestrator_client.rs"]]],\
 ["oak_containers_stage1",["",[],["client.rs","dice.rs","image.rs","main.rs"]]],\
 ["oak_containers_syslogd",["",[],["log_relay.rs","main.rs","systemd_journal.rs"]]],\
@@ -45,7 +46,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["oak_launcher_utils",["",[],["channel.rs","launcher.rs","lib.rs"]]],\
 ["oak_linux_boot_params",["",[],["lib.rs"]]],\
 ["oak_proto_rust",["",[],["lib.rs"]]],\
-["oak_restricted_kernel",["",[["boot",[],["mod.rs"]],["mm",[],["bitmap_frame_allocator.rs","encrypted_mapper.rs","frame_allocator.rs","mod.rs","page_tables.rs","virtual_address_allocator.rs"]],["syscall",[],["channel.rs","dice_data.rs","fd.rs","key.rs","mmap.rs","mod.rs","process.rs","stdio.rs","switch_process.rs"]]],["acpi.rs","args.rs","avx.rs","descriptors.rs","elf.rs","ghcb.rs","interrupts.rs","lib.rs","libm.rs","logging.rs","memory.rs","payload.rs","shutdown.rs","snp.rs","virtio.rs"]]],\
+["oak_restricted_kernel",["",[["boot",[],["mod.rs"]],["mm",[],["bitmap_frame_allocator.rs","encrypted_mapper.rs","frame_allocator.rs","mod.rs","page_tables.rs","virtual_address_allocator.rs"]],["syscall",[],["channel.rs","create_process.rs","dice_data.rs","fd.rs","key.rs","mmap.rs","mod.rs","process.rs","stdio.rs","switch_process.rs"]]],["acpi.rs","args.rs","avx.rs","descriptors.rs","elf.rs","ghcb.rs","interrupts.rs","lib.rs","libm.rs","logging.rs","memory.rs","processes.rs","shutdown.rs","snp.rs","virtio.rs"]]],\
 ["oak_restricted_kernel_dice",["",[],["lib.rs"]]],\
 ["oak_restricted_kernel_interface",["",[],["errno.rs","lib.rs","raw_syscall.rs","syscall.rs","syscalls.rs"]]],\
 ["oak_restricted_kernel_launcher",["",[],["lib.rs"]]],\
