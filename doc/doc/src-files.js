@@ -6,7 +6,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["micro_rpc",["",[],["lib.rs","status.rs"]]],\
 ["micro_rpc_build",["",[],["lib.rs"]]],\
 ["oak_attestation",["",[],["dice.rs","handler.rs","lib.rs"]]],\
-["oak_attestation_explain",["",[],["lib.rs"]]],\
+["oak_attestation_explain",["",[],["json_serialization.rs","lib.rs"]]],\
 ["oak_attestation_explain_cli",["",[],["main.rs"]]],\
 ["oak_attestation_verification",["",[],["amd.rs","claims.rs","endorsement.rs","lib.rs","rekor.rs","util.rs","verifier.rs"]]],\
 ["oak_attestation_verification_test_utils",["",[],["lib.rs"]]],\
@@ -14,17 +14,16 @@ var srcIndex = new Map(JSON.parse('[\
 ["oak_client",["",[],["client.rs","lib.rs","transport.rs","verifier.rs"]]],\
 ["oak_containers_agent",["",[],["lib.rs","metrics.rs"]]],\
 ["oak_containers_hello_world_trusted_app",["",[],["app_service.rs","lib.rs"]]],\
-["oak_containers_hello_world_untrusted_app",["",[],["app_client.rs","lib.rs"]]],\
+["oak_containers_hello_world_untrusted_app",["",[],["app_client.rs","lib.rs","service.rs"]]],\
 ["oak_containers_launcher",["",[],["lib.rs","qemu.rs","server.rs"]]],\
 ["oak_containers_orchestrator",["",[],["cdi.rs","container_runtime.rs","crypto.rs","dice.rs","ipc_server.rs","key_provisioning.rs","launcher_client.rs","lib.rs","logging.rs"]]],\
 ["oak_containers_sdk",["",[],["crypto.rs","lib.rs","orchestrator_client.rs"]]],\
 ["oak_containers_stage1",["",[],["client.rs","dice.rs","image.rs","main.rs"]]],\
 ["oak_containers_syslogd",["",[],["log_relay.rs","main.rs","systemd_journal.rs"]]],\
 ["oak_core",["",[],["lib.rs","samplestore.rs","sync.rs","timer.rs"]]],\
-["oak_crypto",["",[["hpke",[],["aead.rs","mod.rs"]],["noise_handshake",[],["client.rs","crypto_wrapper.rs","error.rs","mod.rs","noise.rs"]]],["encryption_key.rs","encryptor.rs","lib.rs","signer.rs","verifier.rs"]]],\
+["oak_crypto",["",[["hpke",[],["aead.rs","mod.rs"]],["noise_handshake",[],["client.rs","crypto_wrapper.rs","error.rs","mod.rs","noise.rs"]]],["encryption_key.rs","encryptor.rs","identity_key.rs","lib.rs","signer.rs","verifier.rs"]]],\
 ["oak_debug_service",["",[],["lib.rs"]]],\
 ["oak_dice",["",[],["cert.rs","evidence.rs","lib.rs","utils.rs"]]],\
-["oak_docker_linux_init",["",[],["init.rs","main.rs"]]],\
 ["oak_echo_linux_init",["",[],["init.rs","main.rs"]]],\
 ["oak_echo_service",["",[],["lib.rs"]]],\
 ["oak_enclave_runtime_support",["",[],["heap.rs","lib.rs","libm.rs"]]],\
@@ -40,8 +39,10 @@ var srcIndex = new Map(JSON.parse('[\
 ["oak_functions_service",["",[["wasm",[],["api.rs","mod.rs","wasmtime.rs"]]],["instance.rs","lib.rs","logger.rs","lookup.rs","lookup_htbl.rs"]]],\
 ["oak_functions_test_module",["",[],["lib.rs"]]],\
 ["oak_functions_test_utils",["",[],["lib.rs"]]],\
+["oak_grpc",["",[],["lib.rs"]]],\
 ["oak_grpc_utils",["",[],["lib.rs"]]],\
 ["oak_hello_world_linux_init",["",[],["init.rs","main.rs"]]],\
+["oak_hello_world_proto",["",[],["lib.rs"]]],\
 ["oak_kernel_measurement",["",[],["main.rs"]]],\
 ["oak_launcher_utils",["",[],["channel.rs","launcher.rs","lib.rs"]]],\
 ["oak_linux_boot_params",["",[],["lib.rs"]]],\
@@ -62,6 +63,6 @@ var srcIndex = new Map(JSON.parse('[\
 ["oak_virtio",["",[["console",[],["mod.rs"]],["queue",[],["mod.rs","virtq.rs"]],["vsock",[["socket",[],["mod.rs"]]],["mod.rs","packet.rs"]]],["lib.rs"]]],\
 ["sev_serial",["",[],["lib.rs"]]],\
 ["snp_measurement",["",[],["main.rs","page.rs","stage0.rs","vmsa.rs"]]],\
-["xtask",["",[],["files.rs","internal.rs","lib.rs","testing.rs"]]]\
+["xtask",["",[],["files.rs","internal.rs","lib.rs"]]]\
 ]'));
 createSrcSidebar();

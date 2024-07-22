@@ -273,6 +273,12 @@
 <a href="#271" id="271">271</a>
 <a href="#272" id="272">272</a>
 <a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
 </pre></div><pre class="rust"><code><span class="comment">//
 // Copyright 2021 The Project Oak Authors
 //
@@ -329,7 +335,7 @@
 </span><span class="kw">pub fn </span>serialize_entries(entries: HashMap&lt;Vec&lt;u8&gt;, Vec&lt;u8&gt;&gt;) -&gt; Vec&lt;u8&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>buf = Vec::new();
     <span class="kw">for </span>(key, value) <span class="kw">in </span>entries.into_iter() {
-        <span class="kw">let </span>entry_proto = oak_proto_rust::oak::oak_functions::lookup_data::Entry { key, value };
+        <span class="kw">let </span>entry_proto = oak_proto_rust::oak::functions::lookup_data::Entry { key, value };
         entry_proto
             .encode_length_delimited(<span class="kw-2">&amp;mut </span>buf)
             .expect(<span class="string">"couldn't encode entry as length delimited"</span>);
@@ -546,4 +552,10 @@
         .current_dir(workspace_path(<span class="kw-2">&amp;</span>[]))
         .output()
 }
+
+<span class="doccomment">/// Whether to skip the test. For instance, GitHub Actions does not support KVM,
+/// so we cannot run tests that require nested virtualization.
+</span><span class="kw">pub fn </span>skip_test() -&gt; bool {
+    std::env::var(<span class="string">"OAK_KVM_TESTS"</span>).unwrap_or_default().to_lowercase() == <span class="string">"skip"
+</span>}
 </code></pre></div></section></main></body></html>
