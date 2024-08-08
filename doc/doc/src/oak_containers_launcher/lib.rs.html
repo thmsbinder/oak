@@ -342,8 +342,6 @@
 <a href="#340" id="340">340</a>
 <a href="#341" id="341">341</a>
 <a href="#342" id="342">342</a>
-<a href="#343" id="343">343</a>
-<a href="#344" id="344">344</a>
 </pre></div><pre class="rust"><code><span class="comment">//
 // Copyright 2023 The Project Oak Authors
 //
@@ -369,11 +367,10 @@
 
 <span class="kw">use </span>anyhow::Context;
 <span class="kw">use </span>clap::{Parser, ValueEnum};
-<span class="kw">use </span>oak_grpc::oak::key_provisioning::v1::{
-    key_provisioning_client::KeyProvisioningClient, GetGroupKeysRequest, GetGroupKeysResponse,
-};
+<span class="kw">use </span>oak_grpc::oak::key_provisioning::v1::key_provisioning_client::KeyProvisioningClient;
 <span class="kw">use </span>oak_proto_rust::oak::{
-    attestation::v1::{endorsements, Endorsements, Evidence, OakRestrictedKernelEndorsements},
+    attestation::v1::{endorsements, Endorsements, Evidence, OakContainersEndorsements},
+    key_provisioning::v1::{GetGroupKeysRequest, GetGroupKeysResponse},
     session::v1::EndorsedEvidence,
 };
 <span class="kw">pub use </span>qemu::Params <span class="kw">as </span>QemuParams;
@@ -434,12 +431,9 @@
 <span class="kw">impl </span>Args {
     <span class="kw">pub fn </span>default_for_root(root: <span class="kw-2">&amp;</span>str) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>system_image = <span class="macro">format!</span>(<span class="string">"{root}oak_containers_system_image/target/image.tar.xz"</span>,).into();
-        <span class="kw">let </span>container_bundle = <span class="macro">format!</span>(
-            <span class="string">"{root}oak_containers_examples/hello_world/container/target/oak_container_example_oci_filesystem_bundle.tar"</span>,
-        ).into();
         <span class="self">Self </span>{
             system_image,
-            container_bundle,
+            container_bundle: <span class="string">""</span>.into(),
             application_config: Vec::new(),
             qemu_params: qemu::Params::default_for_root(root),
             communication_channel: ChannelType::default(),
@@ -523,6 +517,7 @@
         <span class="kw">let </span>(shutdown_sender, <span class="kw-2">mut </span>shutdown_receiver) = watch::channel::&lt;()&gt;(());
         shutdown_receiver.mark_unchanged(); <span class="comment">// Don't immediately notify on the initial value.
         </span><span class="kw">let </span>(app_notifier_sender, app_notifier_receiver) = oneshot::channel::&lt;()&gt;();
+        <span class="kw">let </span>endorsements = get_endorsements();
         <span class="kw">let </span>server = tokio::spawn(server::new(
             listener,
             vsock_listener,
@@ -532,6 +527,7 @@
             evidence_sender,
             app_notifier_sender,
             shutdown_receiver,
+            endorsements,
         ));
 
         <span class="kw">let </span>trusted_app_channel = <span class="kw">match </span>args.communication_channel {
@@ -623,18 +619,7 @@
                 </span>.context(<span class="string">"couldn't get attestation evidence before timeout"</span>)<span class="question-mark">?
                 </span>.context(<span class="string">"no attestation evidence available"</span>)<span class="question-mark">?</span>;
 
-            <span class="comment">// Initialize attestation endorsements.
-            // TODO(#4074): Add layer endorsements.
-            </span><span class="kw">let </span>oak_restricted_kernel_endorsements = OakRestrictedKernelEndorsements {
-                root_layer: <span class="prelude-val">None</span>,
-                kernel_layer: <span class="prelude-val">None</span>,
-                application_layer: <span class="prelude-val">None</span>,
-            };
-            <span class="kw">let </span>endorsements = Endorsements {
-                r#type: <span class="prelude-val">Some</span>(endorsements::Type::OakRestrictedKernel(
-                    oak_restricted_kernel_endorsements,
-                )),
-            };
+            <span class="kw">let </span>endorsements = get_endorsements();
 
             <span class="kw">let </span>endorsed_evidence =
                 EndorsedEvidence { evidence: <span class="prelude-val">Some</span>(evidence), endorsements: <span class="prelude-val">Some</span>(endorsements) };
@@ -686,6 +671,17 @@
         }
         <span class="kw">let _ </span>= <span class="self">self</span>.vmm.kill().<span class="kw">await</span>;
         <span class="self">self</span>.server.abort();
+    }
+}
+
+<span class="kw">fn </span>get_endorsements() -&gt; Endorsements {
+    Endorsements {
+        r#type: <span class="prelude-val">Some</span>(endorsements::Type::OakContainers(OakContainersEndorsements {
+            root_layer: <span class="prelude-val">None</span>,
+            kernel_layer: <span class="prelude-val">None</span>,
+            system_layer: <span class="prelude-val">None</span>,
+            container_layer: <span class="prelude-val">None</span>,
+        })),
     }
 }
 </code></pre></div></section></main></body></html>
